@@ -1,0 +1,471 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 Composition API Cheatsheet – Chapter 8</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #42b883;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #16a085;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .vue-logo {
+            color: #42b883;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: #16a085;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 10px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .section-header i {
+            font-size: 1.5rem;
+        }
+        
+        .section-content p {
+            margin-bottom: 20px;
+            color: #34495e;
+            font-size: 1.05rem;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #42b883;
+            padding: 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+        
+        .code-comment {
+            color: #7f8c8d;
+        }
+        
+        .code-keyword {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .code-function {
+            color: #3498db;
+        }
+        
+        .code-string {
+            color: #f39c12;
+        }
+        
+        .code-tag {
+            color: #8e44ad;
+        }
+        
+        .code-property {
+            color: #2980b9;
+        }
+        
+        .code-value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .checkmark {
+            color: #27ae60;
+            margin-right: 8px;
+        }
+        
+        .key-takeaways {
+            background: #eafaf1;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .key-takeaways h2 {
+            color: #16a085;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .key-takeaways-list {
+            list-style-type: none;
+        }
+        
+        .key-takeaways-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .key-takeaways-list li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            color: #42b883;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: #16a085;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .download-btn:hover {
+            background: #138a72;
+        }
+        
+        .note-box {
+            background: #fff4e6;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-box h4 {
+            color: #e67e22;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .explanation-box {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .explanation-box h4 {
+            color: #2980b9;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .directive-list {
+            list-style-type: none;
+            margin: 20px 0;
+        }
+        
+        .directive-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .directive-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #16a085;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="cheatsheet-content">
+        <header>
+            <div class="vue-logo">
+                <i class="fab fa-vuejs"></i>
+            </div>
+            <h1>Vue 3 Composition API Cheatsheet – Chapter 8</h1>
+            <p class="subtitle">Teleport</p>
+        </header>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-paper-plane"></i>
+                <h2>Teleport</h2>
+            </div>
+            <div class="section-content">
+                <p><code>Teleport</code> is a powerful feature in Vue 3 that allows you to move content from one part of the DOM to another, without disrupting the <strong>Vue component hierarchy</strong>.</p>
+                
+                <div class="note-box">
+                    <h4><i class="fas fa-lightbulb"></i> Why Use Teleport?</h4>
+                    <p>You use <code>Teleport</code> to render elements like <strong>modals</strong>, <strong>tooltips</strong>, or <strong>dropdowns</strong> outside the normal component structure, at a higher level in the DOM (e.g., directly in the <code>&lt;body&gt;</code> tag). This is useful for scenarios like popups or elements that need to be above other content.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-code"></i>
+                <h2>Basic Teleport Example</h2>
+            </div>
+            <div class="section-content">
+                <p>Before diving into the technical details, let's look at a simple example of how <code>Teleport</code> works.</p>
+                
+                <pre class="code-block"><code><span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;div&gt;</span>
+    <span class="code-tag">&lt;h1&gt;</span>App Content<span class="code-tag">&lt;/h1&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"toggleModal"</span><span class="code-tag">&gt;</span>Show Modal<span class="code-tag">&lt;/button&gt;</span>
+
+    <span class="code-comment">&lt;!-- Teleport to the body element --&gt;</span>
+    <span class="code-tag">&lt;Teleport</span> <span class="code-property">to</span>=<span class="code-string">"body"</span><span class="code-tag">&gt;</span>
+      <span class="code-tag">&lt;div</span> <span class="code-property">v-if</span>=<span class="code-string">"showModal"</span> <span class="code-property">class</span>=<span class="code-string">"modal"</span><span class="code-tag">&gt;</span>
+        <span class="code-tag">&lt;p&gt;</span>This is a modal!<span class="code-tag">&lt;/p&gt;</span>
+        <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"showModal = false"</span><span class="code-tag">&gt;</span>Close Modal<span class="code-tag">&lt;/button&gt;</span>
+      <span class="code-tag">&lt;/div&gt;</span>
+    <span class="code-tag">&lt;/Teleport&gt;</span>
+  <span class="code-tag">&lt;/div&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span>
+
+<span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { ref } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>
+
+<span class="code-keyword">const</span> showModal = ref(<span class="code-value">false</span>)
+
+<span class="code-keyword">const</span> toggleModal = () => {
+  showModal.value = !showModal.value
+}
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;style&gt;</span>
+.modal {
+  position: fixed;
+  top: <span class="code-value">50</span>%;
+  left: <span class="code-value">50</span>%;
+  transform: translate(-<span class="code-value">50</span>%, -<span class="code-value">50</span>%);
+  background-color: rgba(<span class="code-value">0</span>, <span class="code-value">0</span>, <span class="code-value">0</span>, <span class="code-value">0.8</span>);
+  color: white;
+  padding: <span class="code-value">20</span>px;
+}
+<span class="code-tag">&lt;/style&gt;</span></code></pre>
+                
+                <div class="explanation-box">
+                    <h4><i class="fas fa-info-circle"></i> Explanation:</h4>
+                    <ol class="directive-list">
+                        <li>The <strong>modal</strong> is inside the parent component, but the <strong>Teleport</strong> element moves it to the <strong><code>body</code></strong> element.</li>
+                        <li>Clicking the <strong>button</strong> toggles the <code>showModal</code> state, showing or hiding the modal.</li>
+                        <li><strong>Teleport</strong> renders the modal at the top level of the DOM, <strong>outside</strong> the component's structure.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>Reactivity Issue with Teleport</h2>
+            </div>
+            <div class="section-content">
+                <p>When you teleport content to <strong>another Vue component</strong> or <strong>outside Vue's control</strong>, the reactivity system can face issues because Vue tracks reactivity <strong>within the component hierarchy</strong>. Teleporting content outside that hierarchy may cause <strong>state updates to not propagate</strong> correctly.</p>
+                
+                <div class="note-box">
+                    <h4><i class="fas fa-question-circle"></i> Why does this happen?</h4>
+                    <ul class="directive-list">
+                        <li><strong>Vue's reactivity</strong> depends on the <strong>DOM structure</strong>. When content is moved outside of Vue's DOM management (for example, to <code>body</code> or another component), Vue may not track the changes to that content anymore.</li>
+                        <li><strong>Teleport</strong> moves the content outside of Vue's <strong>reactivity system</strong>, leading to potential issues, especially with state-driven content like modals.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-wrench"></i>
+                <h2>How to Fix Reactivity Issues</h2>
+            </div>
+            <div class="section-content">
+                <p>To solve this, you need to ensure that the <strong>state controlling the teleported content</strong> (e.g., <code>showModal</code>) is <strong>shared properly</strong> across the Vue component hierarchy. You can achieve this using one of the following methods:</p>
+                
+                <h3>1. Use Provide/Inject (Recommended for small apps)</h3>
+                <p><strong><code>Provide/Inject</code></strong> allows you to share state across components, even if the components are rendered outside of the normal Vue tree (like in a <code>Teleport</code>).</p>
+                
+                <h4>Parent Component:</h4>
+                <pre class="code-block"><code><span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;div&gt;</span>
+    <span class="code-tag">&lt;h1&gt;</span>App Content<span class="code-tag">&lt;/h1&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"toggleModal"</span><span class="code-tag">&gt;</span>Show Modal<span class="code-tag">&lt;/button&gt;</span>
+
+    <span class="code-comment">&lt;!-- Teleport to another part of the DOM --&gt;</span>
+    <span class="code-tag">&lt;Teleport</span> <span class="code-property">to</span>=<span class="code-string">"body"</span><span class="code-tag">&gt;</span>
+      <span class="code-tag">&lt;Modal</span> <span class="code-tag">/&gt;</span>
+    <span class="code-tag">&lt;/Teleport&gt;</span>
+  <span class="code-tag">&lt;/div&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span>
+
+<span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { ref, provide } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>
+<span class="code-keyword">import</span> Modal <span class="code-keyword">from</span> <span class="code-string">'./Modal.vue'</span>
+
+<span class="code-keyword">const</span> showModal = ref(<span class="code-value">false</span>)
+provide(<span class="code-string">'showModal'</span>, showModal)
+
+<span class="code-keyword">const</span> toggleModal = () => {
+  showModal.value = !showModal.value
+}
+<span class="code-tag">&lt;/script&gt;</span></code></pre>
+                
+                <h4>Child Component (Modal.vue):</h4>
+                <pre class="code-block"><code><span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;div</span> <span class="code-property">v-if</span>=<span class="code-string">"showModal"</span> <span class="code-property">class</span>=<span class="code-string">"modal"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;p&gt;</span>This is a modal!<span class="code-tag">&lt;/p&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"showModal = false"</span><span class="code-tag">&gt;</span>Close Modal<span class="code-tag">&lt;/button&gt;</span>
+  <span class="code-tag">&lt;/div&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span>
+
+<span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { inject } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>
+
+<span class="code-keyword">const</span> showModal = inject(<span class="code-string">'showModal'</span>)
+<span class="code-tag">&lt;/script&gt;</span></code></pre>
+                
+                <div class="explanation-box">
+                    <h4><i class="fas fa-info-circle"></i> Explanation:</h4>
+                    <ul class="directive-list">
+                        <li><strong><code>provide</code></strong> in the parent component shares the <code>showModal</code> state.</li>
+                        <li><strong><code>inject</code></strong> in the modal component accesses the shared state, ensuring that the modal reacts to state changes even if it's teleported outside of Vue's normal DOM management.</li>
+                    </ul>
+                </div>
+                
+                <h3>2. Use Vuex (or Pinia) (For Larger Apps)</h3>
+                <ul class="directive-list">
+                    <li><strong>Vuex</strong> or <strong>Pinia</strong> (Vue 3's state management libraries) can be used to manage the modal's visibility globally across the app.</li>
+                    <li>This is especially useful for more complex scenarios where multiple components need access to the same state.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="key-takeaways">
+            <h2>📝 Summary</h2>
+            <ul class="key-takeaways-list">
+                <li><code>Teleport</code> is useful when you want to render content outside its normal DOM hierarchy, such as for modals or tooltips.</li>
+                <li><strong>Reactivity issues</strong> can occur when the content is teleported to <strong>another component</strong> or <strong>outside Vue's reactivity system</strong>.</li>
+                <li>To solve these issues, use <strong>Provide/Inject</strong>, <strong>Vuex</strong>, or <strong>Pinia</strong> to share state across components.</li>
+                <li><code>Teleport</code> allows content to be rendered anywhere in the DOM without needing to adhere to the normal parent-child component relationship.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <button id="downloadBtn" class="download-btn">
+            <i class="fas fa-download"></i> Download as PDF
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a clone of the content to avoid modifying the original
+            const content = document.getElementById('cheatsheet-content').cloneNode(true);
+            
+            // Create a temporary container for the PDF content
+            const pdfContainer = document.createElement('div');
+            pdfContainer.style.padding = '20px';
+            pdfContainer.appendChild(content);
+            
+            // PDF options
+            const options = {
+                margin: 10,
+                filename: 'Vue3_Composition_API_Cheatsheet_Chapter9.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Generate and download the PDF
+            html2pdf().set(options).from(pdfContainer).save();
+        });
+    </script>
+</body>
+</html>
