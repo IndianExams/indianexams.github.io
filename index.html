@@ -12,7 +12,6 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
             color: #2c3e50;
@@ -20,12 +19,10 @@
             padding: 20px;
             min-height: 100vh;
         }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
         header {
             text-align: center;
             margin-bottom: 40px;
@@ -34,40 +31,34 @@
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
-        
         h1 {
             font-size: 2.8rem;
             color: #2c3e50;
             margin-bottom: 15px;
         }
-        
         .subtitle {
             font-size: 1.2rem;
             color: #7f8c8d;
             max-width: 800px;
             margin: 0 auto;
         }
-        
         .vue-logo {
             color: #42b883;
             font-size: 2.5rem;
             margin-bottom: 20px;
         }
-        
         .parts-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
             margin-bottom: 40px;
         }
-        
         .part {
             background: white;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
-        
         .part-header {
             background: #16a085;
             color: white;
@@ -76,7 +67,6 @@
             align-items: center;
             justify-content: space-between;
         }
-        
         .part-header h2 {
             font-size: 1.5rem;
             font-weight: 600;
@@ -84,7 +74,6 @@
             align-items: center;
             gap: 10px;
         }
-        
         .part-number {
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
@@ -95,31 +84,27 @@
             justify-content: center;
             font-weight: bold;
         }
-        
         .part-body {
             padding: 25px;
         }
-        
         .chapter-list {
             list-style-type: none;
         }
-        
         .chapter-item {
             padding: 15px;
             border-bottom: 1px solid #f1f1f1;
             display: flex;
             align-items: center;
             transition: background 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
         }
-        
         .chapter-item:hover {
             background: #f9f9f9;
         }
-        
         .chapter-item:last-child {
             border-bottom: none;
         }
-        
         .chapter-icon {
             width: 36px;
             height: 36px;
@@ -130,23 +115,20 @@
             justify-content: center;
             margin-right: 15px;
             color: #16a085;
+            font-size: 1.3rem;
         }
-        
         .chapter-content {
             flex: 1;
         }
-        
         .chapter-title {
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 5px;
         }
-        
         .chapter-desc {
             font-size: 0.9rem;
             color: #7f8c8d;
         }
-        
         .status {
             background: #42b883;
             color: white;
@@ -155,19 +137,6 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
-        .status-completed {
-            background: #42b883;
-        }
-        
-        .status-in-progress {
-            background: #f39c12;
-        }
-        
-        .status-pending {
-            background: #95a5a6;
-        }
-        
         .footer {
             text-align: center;
             padding: 25px;
@@ -176,7 +145,6 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             margin-top: 20px;
         }
-        
         .start-btn {
             display: inline-block;
             background: #16a085;
@@ -188,16 +156,13 @@
             transition: background 0.3s ease;
             margin-top: 15px;
         }
-        
         .start-btn:hover {
             background: #138a72;
         }
-        
         @media (max-width: 768px) {
             .parts-container {
                 grid-template-columns: 1fr;
             }
-            
             h1 {
                 font-size: 2.2rem;
             }
@@ -215,154 +180,124 @@
         </header>
         
         <div class="parts-container">
+            <!-- Part 1: Core Basics -->
             <div class="part">
                 <div class="part-header">
                     <h2><span class="part-number">1</span> Core Basics</h2>
-                    <span class="status status-completed">Completed</span>
+                    <span class="status">Completed</span>
                 </div>
                 <div class="part-body">
                     <ul class="chapter-list">
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
+                        <a href="Chapter1.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-play"></i></div>
                             <div class="chapter-content">
                                 <div class="chapter-title">Introduction to Composition API</div>
-                                <div class="chapter-desc">What is setup() and why Composition API?</div>
+                                <div class="chapter-desc">What is setup()? How does ref and reactive work?</div>
                             </div>
-                        </li>
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-calculator"></i>
-                            </div>
+                        </a>
+                        <a href="Chapter2.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-calculator"></i></div>
                             <div class="chapter-content">
                                 <div class="chapter-title">Computed & Watchers</div>
-                                <div class="chapter-desc">computed(), watch() and watchEffect()</div>
+                                <div class="chapter-desc">computed(), watch() and watchEffect() explained</div>
                             </div>
-                        </li>
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-history"></i>
-                            </div>
+                        </a>
+                        <a href="Chapter3.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-history"></i></div>
                             <div class="chapter-content">
                                 <div class="chapter-title">Lifecycle Hooks</div>
-                                <div class="chapter-desc">onMounted, onUpdated, onUnmounted</div>
+                                <div class="chapter-desc">onMounted, onUnmounted, and other hooks</div>
                             </div>
-                        </li>
+                        </a>
+                        <a href="Chapter4.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-code"></i></div>
+                            <div class="chapter-content">
+                                <div class="chapter-title">Template Syntax & Directives</div>
+                                <div class="chapter-desc">v-bind, v-on, v-for, v-if, slots, and more</div>
+                            </div>
+                        </a>
                     </ul>
                 </div>
             </div>
-            
+            <!-- Part 2: Component Communication -->
             <div class="part">
                 <div class="part-header">
                     <h2><span class="part-number">2</span> Component Communication</h2>
-                    <span class="status status-completed">Completed</span>
+                    <span class="status">Completed</span>
                 </div>
                 <div class="part-body">
                     <ul class="chapter-list">
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-exchange-alt"></i>
-                            </div>
+                        <a href="Chapter5.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-exchange-alt"></i></div>
                             <div class="chapter-content">
-                                <div class="chapter-title">Props & Emits</div>
-                                <div class="chapter-desc">defineProps() and defineEmits()</div>
+                                <div class="chapter-title">Component Communication</div>
+                                <div class="chapter-desc">Props, emits, slots, provide/inject, v-model, refs, and defineExpose</div>
                             </div>
-                        </li>
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-puzzle-piece"></i>
-                            </div>
-                            <div class="chapter-content">
-                                <div class="chapter-title">Slots & Scoped Slots</div>
-                                <div class="chapter-desc">Default, named and scoped slots</div>
-                            </div>
-                        </li>
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-tint"></i>
-                            </div>
-                            <div class="chapter-content">
-                                <div class="chapter-title">Provide & Inject</div>
-                                <div class="chapter-desc">Dependency injection basics</div>
-                            </div>
-                        </li>
+                        </a>
                     </ul>
                 </div>
             </div>
-            
+            <!-- Part 3: Reuse & Advanced Reactivity -->
             <div class="part">
                 <div class="part-header">
-                    <h2><span class="part-number">3</span> Advanced Reactivity & Reuse</h2>
-                    <span class="status status-completed">Completed</span>
+                    <h2><span class="part-number">3</span> Reuse & Advanced Reactivity</h2>
+                    <span class="status">Completed</span>
                 </div>
                 <div class="part-body">
                     <ul class="chapter-list">
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <div class="chapter-content">
-                                <div class="chapter-title">Advanced Reactivity</div>
-                                <div class="chapter-desc">shallowRef, shallowReactive, readonly</div>
-                            </div>
-                        </li>
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-cubes"></i>
-                            </div>
+                        <a href="Chapter6.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-cubes"></i></div>
                             <div class="chapter-content">
                                 <div class="chapter-title">Reusable Composables</div>
-                                <div class="chapter-desc">Extracting logic into composable functions</div>
+                                <div class="chapter-desc">How to extract and use reusable logic</div>
                             </div>
-                        </li>
+                        </a>
+                        <a href="Chapter7.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-bolt"></i></div>
+                            <div class="chapter-content">
+                                <div class="chapter-title">Advanced Reactivity</div>
+                                <div class="chapter-desc">shallowRef, toRefs, readonly, customRef, toRaw, and more</div>
+                            </div>
+                        </a>
                     </ul>
                 </div>
             </div>
-            
+            <!-- Part 4: Async, Teleport, Render, Best Practices -->
             <div class="part">
                 <div class="part-header">
-                    <h2><span class="part-number">4</span> Asynchronous & Advanced Topics</h2>
-                    <span class="status status-completed">Completed</span>
+                    <h2><span class="part-number">4</span> Async & Advanced Topics</h2>
+                    <span class="status">Completed</span>
                 </div>
                 <div class="part-body">
                     <ul class="chapter-list">
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-hourglass-half"></i>
-                            </div>
+                        <a href="Chapter9.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-hourglass-half"></i></div>
                             <div class="chapter-content">
                                 <div class="chapter-title">Async Setup & Suspense</div>
-                                <div class="chapter-desc">Async setup() and Suspense usage</div>
+                                <div class="chapter-desc">Using async setup() and Suspense for async rendering</div>
                             </div>
-                        </li>
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-door-open"></i>
-                            </div>
+                        </a>
+                        <a href="Chapter8.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-door-open"></i></div>
                             <div class="chapter-content">
-                                <div class="chapter-title">Teleport & Portals</div>
-                                <div class="chapter-desc">Rendering outside DOM hierarchy</div>
+                                <div class="chapter-title">Teleport</div>
+                                <div class="chapter-desc">Rendering content outside normal DOM hierarchy</div>
                             </div>
-                        </li>
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-code"></i>
-                            </div>
+                        </a>
+                        <a href="Chapter10.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-code"></i></div>
                             <div class="chapter-content">
                                 <div class="chapter-title">Render Functions & JSX</div>
-                                <div class="chapter-desc">Using JSX in Vue 3</div>
+                                <div class="chapter-desc">Programmatic rendering and JSX usage in Vue 3</div>
                             </div>
-                        </li>
-                        <li class="chapter-item">
-                            <div class="chapter-icon">
-                                <i class="fas fa-star"></i>
-                            </div>
+                        </a>
+                        <a href="Chapter11.html" class="chapter-item">
+                            <div class="chapter-icon"><i class="fas fa-star"></i></div>
                             <div class="chapter-content">
                                 <div class="chapter-title">Best Practices & Patterns</div>
-                                <div class="chapter-desc">Performance considerations and organization</div>
+                                <div class="chapter-desc">Organization, performance, mixing APIs, and more</div>
                             </div>
-                        </li>
+                        </a>
                     </ul>
                 </div>
             </div>
@@ -370,25 +305,10 @@
         
         <div class="footer">
             <p>Start your learning journey with Vue 3 Composition API</p>
-            <a href="#" class="start-btn">
+            <a href="Chapter1.html" class="start-btn">
                 <i class="fas fa-arrow-right"></i> Start with Chapter 1
             </a>
         </div>
     </div>
-
-    <script>
-        // Simple interaction for chapter items
-        document.querySelectorAll('.chapter-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const chapterTitle = this.querySelector('.chapter-title').textContent;
-                alert(`This would navigate to the "${chapterTitle}" chapter in a real application.`);
-            });
-        });
-        
-        document.querySelector('.start-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('This would start with Chapter 1 in a real application.');
-        });
-    </script>
 </body>
 </html>
