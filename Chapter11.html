@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 Composition API Cheatsheet – Chapter 12</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #42b883;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #16a085;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .vue-logo {
+            color: #42b883;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: #16a085;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 10px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .section-header i {
+            font-size: 1.5rem;
+        }
+        
+        .section-content p {
+            margin-bottom: 20px;
+            color: #34495e;
+            font-size: 1.05rem;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #42b883;
+            padding: 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+        
+        .code-comment {
+            color: #7f8c8d;
+        }
+        
+        .code-keyword {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .code-function {
+            color: #3498db;
+        }
+        
+        .code-string {
+            color: #f39c12;
+        }
+        
+        .code-tag {
+            color: #8e44ad;
+        }
+        
+        .code-property {
+            color: #2980b9;
+        }
+        
+        .code-value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .checkmark {
+            color: #27ae60;
+            margin-right: 8px;
+        }
+        
+        .key-takeaways {
+            background: #eafaf1;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .key-takeaways h2 {
+            color: #16a085;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .key-takeaways-list {
+            list-style-type: none;
+        }
+        
+        .key-takeaways-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .key-takeaways-list li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            color: #42b883;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: #16a085;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .download-btn:hover {
+            background: #138a72;
+        }
+        
+        .note-box {
+            background: #fff4e6;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-box h4 {
+            color: #e67e22;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .explanation-box {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .explanation-box h4 {
+            color: #2980b9;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .directive-list {
+            list-style-type: none;
+            margin: 20px 0;
+        }
+        
+        .directive-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .directive-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #16a085;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .performance-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .performance-tip {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b883;
+        }
+        
+        .performance-tip h4 {
+            color: #16a085;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .performance-tips {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="cheatsheet-content">
+        <header>
+            <div class="vue-logo">
+                <i class="fab fa-vuejs"></i>
+            </div>
+            <h1>Vue 3 Composition API Cheatsheet – Chapter 12</h1>
+            <p class="subtitle">Best Practices & Patterns</p>
+        </header>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-star"></i>
+                <h2>Best Practices & Patterns</h2>
+            </div>
+            <div class="section-content">
+                <p>Vue 3's Composition API gives more flexibility, but with flexibility comes responsibility 😅. This chapter shows how to <strong>organize, mix, and optimize</strong> your Vue code.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-folder-open"></i>
+                <h2>1. Organizing Code with Composition API</h2>
+            </div>
+            <div class="section-content">
+                <p>Instead of putting all logic in one <code>setup()</code>, you can split it into <strong>composables</strong> (<code>useXyz</code> functions). This makes logic <strong>reusable</strong> and <strong>maintainable</strong>.</p>
+                
+                <h3>Example: useCounter composable</h3>
+                <pre class="code-block"><code><span class="code-comment">// composables/useCounter.js</span>
+<span class="code-keyword">import</span> { ref } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">export function</span> <span class="code-function">useCounter</span>(initial = <span class="code-value">0</span>) {
+  <span class="code-keyword">const</span> count = ref(initial)
+  <span class="code-keyword">const</span> increment = () => count.value++
+  <span class="code-keyword">const</span> decrement = () => count.value--
+  <span class="code-keyword">return</span> { count, increment, decrement }
+}</code></pre>
+
+                <h3>Usage in a component</h3>
+                <pre class="code-block"><code><span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { useCounter } <span class="code-keyword">from</span> <span class="code-string">"@/composables/useCounter"</span>
+
+<span class="code-keyword">const</span> { count, increment, decrement } = useCounter(<span class="code-value">5</span>)
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;div&gt;</span>
+    <span class="code-tag">&lt;p&gt;</span>Count: {{ count }}<span class="code-tag">&lt;/p&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"increment"</span><span class="code-tag">&gt;</span>+<span class="code-tag">&lt;/button&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"decrement"</span><span class="code-tag">&gt;</span>-<span class="code-tag">&lt;/button&gt;</span>
+  <span class="code-tag">&lt;/div&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+                
+                <div class="note-box">
+                    <h4><i class="fas fa-lightbulb"></i> Benefit</h4>
+                    <p>Code is <strong>cleaner</strong>, logic is <strong>testable</strong>, and multiple components can reuse it.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-blender"></i>
+                <h2>2. Mixing Options API & Composition API</h2>
+            </div>
+            <div class="section-content">
+                <p>Vue 3 allows <strong>hybrid components</strong>: you can use Options API (<code>data</code>, <code>methods</code>, <code>computed</code>) together with Composition API (<code>setup()</code>).</p>
+                
+                <p>This is useful for:</p>
+                <ul class="directive-list">
+                    <li>Migrating from Vue 2 → Vue 3 gradually.</li>
+                    <li>Working in large teams where not everyone is comfortable with Composition API.</li>
+                </ul>
+                
+                <h3>Example: Mixed usage</h3>
+                <pre class="code-block"><code><span class="code-tag">&lt;script&gt;</span>
+<span class="code-keyword">import</span> { ref, onMounted } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">export default</span> {
+  data() {
+    <span class="code-keyword">return</span> {
+      message: <span class="code-string">"Hello from Options API"</span>
+    }
+  },
+  setup() {
+    <span class="code-keyword">const</span> count = ref(<span class="code-value">0</span>)
+    onMounted(() => console.log(<span class="code-string">"Mounted with Composition API"</span>))
+    <span class="code-keyword">return</span> { count }
+  },
+  methods: {
+    increment() {
+      <span class="code-keyword">this</span>.count++   <span class="code-comment">// still works fine</span>
+    }
+  }
+}
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;div&gt;</span>
+    <span class="code-tag">&lt;p&gt;</span>{{ message }}<span class="code-tag">&lt;/p&gt;</span>
+    <span class="code-tag">&lt;p&gt;</span>Count: {{ count }}<span class="code-tag">&lt;/p&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"increment"</span><span class="code-tag">&gt;</span>Increment<span class="code-tag">&lt;/button&gt;</span>
+  <span class="code-tag">&lt;/div&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+                
+                <div class="note-box">
+                    <h4><i class="fas fa-lightbulb"></i> Note</h4>
+                    <p>You can <strong>read Composition API state</strong> in Options methods via <code>this</code>.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-tachometer-alt"></i>
+                <h2>3. Performance Considerations</h2>
+            </div>
+            <div class="section-content">
+                <p>Vue 3 is already optimized, but there are <strong>best practices</strong>:</p>
+                
+                <div class="performance-tips">
+                    <div class="performance-tip">
+                        <h4><i class="fas fa-database"></i> 1. Use <code>ref</code> / <code>reactive</code> carefully</h4>
+                        <ul class="directive-list">
+                            <li>Too many deeply nested reactive objects = overhead.</li>
+                            <li>Prefer <strong>shallowRef / shallowReactive</strong> when deep reactivity isn't needed.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="performance-tip">
+                        <h4><i class="fas fa-ban"></i> 2. Avoid unnecessary reactivity</h4>
+                        <pre class="code-block"><code><span class="code-comment">// ❌ Inefficient: makes whole object reactive</span>
+<span class="code-keyword">const</span> state = reactive({ items: [] })
+
+<span class="code-comment">// ✅ Better: use ref for array</span>
+<span class="code-keyword">const</span> items = ref([])</code></pre>
+                    </div>
+                    
+                    <div class="performance-tip">
+                        <h4><i class="fas fa-fast-forward"></i> 3. Use <code>v-memo</code> or <code>v-once</code> for static content</h4>
+                        <pre class="code-block"><code><span class="code-tag">&lt;h1</span> <span class="code-property">v-once</span><span class="code-tag">&gt;</span>Static Title<span class="code-tag">&lt;/h1&gt;</span></code></pre>
+                    </div>
+                    
+                    <div class="performance-tip">
+                        <h4><i class="fas fa-hourglass-half"></i> 4. Lazy-load components with <code>defineAsyncComponent</code></h4>
+                        <pre class="code-block"><code><span class="code-keyword">import</span> { defineAsyncComponent } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+<span class="code-keyword">const</span> AsyncModal = defineAsyncComponent(() => <span class="code-keyword">import</span>(<span class="code-string">"./Modal.vue"</span>))</code></pre>
+                    </div>
+                    
+                    <div class="performance-tip">
+                        <h4><i class="fas fa-eye"></i> 5. WatchEffect vs Watch</h4>
+                        <ul class="directive-list">
+                            <li>Use <code>watchEffect</code> for auto-tracking,</li>
+                            <li>Use <code>watch</code> when you need <strong>specific dependencies</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-takeaways">
+            <h2>✅ Summary</h2>
+            <ul class="key-takeaways-list">
+                <li><strong>Organize</strong>: Use composables (<code>useXyz</code>) to keep logic modular.</li>
+                <li><strong>Mixing APIs</strong>: Safe to mix Options & Composition APIs → useful in migrations.</li>
+                <li><strong>Performance</strong>: Optimize reactivity, use async/lazy components, and avoid unnecessary reactive wrapping.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <button id="downloadBtn" class="download-btn">
+            <i class="fas fa-download"></i> Download as PDF
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a clone of the content to avoid modifying the original
+            const content = document.getElementById('cheatsheet-content').cloneNode(true);
+            
+            // Create a temporary container for the PDF content
+            const pdfContainer = document.createElement('div');
+            pdfContainer.style.padding = '20px';
+            pdfContainer.appendChild(content);
+            
+            // PDF options
+            const options = {
+                margin: 10,
+                filename: 'Vue3_Composition_API_Cheatsheet_Chapter12.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Generate and download the PDF
+            html2pdf().set(options).from(pdfContainer).save();
+        });
+    </script>
+</body>
+</html>
