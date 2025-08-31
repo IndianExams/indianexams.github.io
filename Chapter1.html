@@ -1,0 +1,360 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 Composition API Cheatsheet – Chapter 1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #42b883;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #16a085;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .vue-logo {
+            color: #42b883;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: #16a085;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .section-header i {
+            font-size: 1.5rem;
+        }
+        
+        .section-content p {
+            margin-bottom: 20px;
+            color: #34495e;
+            font-size: 1.05rem;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #42b883;
+            padding: 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+        
+        .code-comment {
+            color: #7f8c8d;
+        }
+        
+        .code-keyword {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .code-function {
+            color: #3498db;
+        }
+        
+        .code-string {
+            color: #f39c12;
+        }
+        
+        .code-tag {
+            color: #8e44ad;
+        }
+        
+        .code-property {
+            color: #2980b9;
+        }
+        
+        .code-value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .checkmark {
+            color: #27ae60;
+            margin-right: 8px;
+        }
+        
+        .key-takeaways {
+            background: #eafaf1;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .key-takeaways h2 {
+            color: #16a085;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .key-takeaways-list {
+            list-style-type: none;
+        }
+        
+        .key-takeaways-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .key-takeaways-list li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            color: #42b883;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: #16a085;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .download-btn:hover {
+            background: #138a72;
+        }
+        
+        .note-box {
+            background: #fff4e6;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-box h4 {
+            color: #e67e22;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="cheatsheet-content">
+        <header>
+            <div class="vue-logo">
+                <i class="fab fa-vuejs"></i>
+            </div>
+            <h1>Vue 3 Composition API Cheatsheet – Chapter 1</h1>
+            <p class="subtitle">Introduction to Composition API</p>
+        </header>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-star"></i>
+                <h2>What is the Composition API?</h2>
+            </div>
+            <div class="section-content">
+                <p>The Composition API is a new way to write Vue components, introduced in <strong>Vue 3</strong>, that makes code more <strong>organized</strong>, <strong>reusable</strong>, and <strong>scalable</strong> compared to the Options API.</p>
+                
+                <ul>
+                    <li><strong>Options API</strong> → organizes code by <strong>option type</strong> (<code>data</code>, <code>methods</code>, <code>computed</code>, etc.).</li>
+                    <li><strong>Composition API</strong> → organizes code by <strong>logic and features</strong>, making it easier to reuse.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-cogs"></i>
+                <h2>The setup() Function</h2>
+            </div>
+            <div class="section-content">
+                <ul>
+                    <li>The entry point of the Composition API inside a component.</li>
+                    <li>Runs <strong>before lifecycle hooks</strong>.</li>
+                    <li>Returns values that can be used inside the template.</li>
+                </ul>
+                
+                <pre class="code-block"><code><span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { ref } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">const</span> message = ref(<span class="code-string">"Hello Vue 3!"</span>)
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;h1&gt;</span>{{ message }}<span class="code-tag">&lt;/h1&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-exchange-alt"></i>
+                <h2>ref() vs reactive()</h2>
+            </div>
+            <div class="section-content">
+                <ul>
+                    <li><code>ref()</code> → For <strong>primitive values</strong> (string, number, boolean).</li>
+                    <li><code>reactive()</code> → For <strong>objects & arrays</strong>.</li>
+                </ul>
+                
+                <div class="note-box">
+                    <h4><i class="fas fa-lightbulb"></i> Important difference</h4>
+                    <p>With <strong>ref</strong>, you must use <code>.value</code> in JavaScript. With <strong>reactive</strong>, you do <strong>not</strong> use <code>.value</code> (Vue unwraps it automatically).</p>
+                </div>
+                
+                <pre class="code-block"><code><span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { ref, reactive } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-comment">// ref example</span>
+<span class="code-keyword">const</span> count = ref(<span class="code-value">0</span>)
+<span class="code-keyword">function</span> <span class="code-function">increment</span>() {
+  count<span class="code-keyword">.value</span>++  <span class="code-comment">// must use .value</span>
+}
+
+<span class="code-comment">// reactive example</span>
+<span class="code-keyword">const</span> user = reactive({
+  name: <span class="code-string">"Daniel"</span>,
+  age: <span class="code-value">34</span>
+})
+<span class="code-keyword">function</span> <span class="code-function">birthday</span>() {
+  user.age++  <span class="code-comment">// no .value needed</span>
+}
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"increment"</span><span class="code-tag">&gt;</span>Count: {{ count }}<span class="code-tag">&lt;/button&gt;</span>
+  <span class="code-tag">&lt;p&gt;</span>{{ user.name }} - {{ user.age }}<span class="code-tag">&lt;/p&gt;</span>
+  <span class="code-tag">&lt;button</span> <span class="code-property">@click</span>=<span class="code-string">"birthday"</span><span class="code-tag">&gt;</span>Increase Age<span class="code-tag">&lt;/button&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+            </div>
+        </div>
+        
+        <div class="key-takeaways">
+            <h2>✅ Key Takeaways</h2>
+            <ul class="key-takeaways-list">
+                <li>Use <code>setup()</code> to define state & logic.</li>
+                <li>Use <code>ref()</code> for primitive values, <code>reactive()</code> for objects.</li>
+                <li><strong>ref → requires <code>.value</code> in JS</strong>; <strong>reactive → no <code>.value</code> needed</strong>.</li>
+                <li>Both are automatically unwrapped inside templates.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <button id="downloadBtn" class="download-btn">
+            <i class="fas fa-download"></i> Download as PDF
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a clone of the content to avoid modifying the original
+            const content = document.getElementById('cheatsheet-content').cloneNode(true);
+            
+            // Create a temporary container for the PDF content
+            const pdfContainer = document.createElement('div');
+            pdfContainer.style.padding = '20px';
+            pdfContainer.appendChild(content);
+            
+            // PDF options
+            const options = {
+                margin: 10,
+                filename: 'Vue3_Composition_API_Cheatsheet_Chapter1.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Generate and download the PDF
+            html2pdf().set(options).from(pdfContainer).save();
+        });
+    </script>
+</body>
+</html>
