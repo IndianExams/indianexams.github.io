@@ -1,0 +1,414 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 Composition API Cheatsheet – Chapter 3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #42b883;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #16a085;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .vue-logo {
+            color: #42b883;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: #16a085;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .section-header i {
+            font-size: 1.5rem;
+        }
+        
+        .section-content p {
+            margin-bottom: 20px;
+            color: #34495e;
+            font-size: 1.05rem;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #42b883;
+            padding: 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+        
+        .code-comment {
+            color: #7f8c8d;
+        }
+        
+        .code-keyword {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .code-function {
+            color: #3498db;
+        }
+        
+        .code-string {
+            color: #f39c12;
+        }
+        
+        .code-tag {
+            color: #8e44ad;
+        }
+        
+        .code-property {
+            color: #2980b9;
+        }
+        
+        .code-value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .checkmark {
+            color: #27ae60;
+            margin-right: 8px;
+        }
+        
+        .key-takeaways {
+            background: #eafaf1;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .key-takeaways h2 {
+            color: #16a085;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .key-takeaways-list {
+            list-style-type: none;
+        }
+        
+        .key-takeaways-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .key-takeaways-list li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            color: #42b883;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: #16a085;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .download-btn:hover {
+            background: #138a72;
+        }
+        
+        .note-box {
+            background: #fff4e6;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-box h4 {
+            color: #e67e22;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Table styles */
+        .hooks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .hooks-table th, .hooks-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .hooks-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .hooks-table tr:hover {
+            background-color: #f5f7fa;
+        }
+        
+        .hooks-table td:first-child {
+            font-weight: 600;
+            color: #16a085;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .hooks-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="cheatsheet-content">
+        <header>
+            <div class="vue-logo">
+                <i class="fab fa-vuejs"></i>
+            </div>
+            <h1>Vue 3 Composition API Cheatsheet – Chapter 3</h1>
+            <p class="subtitle">Lifecycle Hooks</p>
+        </header>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-history"></i>
+                <h2>Commonly Used Lifecycle Hooks</h2>
+            </div>
+            <div class="section-content">
+                <table class="hooks-table">
+                    <thead>
+                        <tr>
+                            <th>Hook</th>
+                            <th>When it runs</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>onMounted</code></td>
+                            <td>After component is mounted (DOM available)</td>
+                            <td>Fetch API data, initialize libraries</td>
+                        </tr>
+                        <tr>
+                            <td><code>onUnmounted</code></td>
+                            <td>Before component is destroyed</td>
+                            <td>Cleanup (remove event listeners, stop timers)</td>
+                        </tr>
+                        <tr>
+                            <td><code>onUpdated</code></td>
+                            <td>After reactive state updates the DOM</td>
+                            <td>Debug DOM changes, sync non-Vue libraries</td>
+                        </tr>
+                        <tr>
+                            <td><code>onBeforeMount</code></td>
+                            <td>Right before DOM is mounted</td>
+                            <td>Rarely used, setup last-minute data</td>
+                        </tr>
+                        <tr>
+                            <td><code>onBeforeUnmount</code></td>
+                            <td>Right before component teardown</td>
+                            <td>Cleanup before destroy</td>
+                        </tr>
+                        <tr>
+                            <td><code>onBeforeUpdate</code></td>
+                            <td>Before DOM re-render caused by reactive changes</td>
+                            <td>Debug, measure performance</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-download"></i>
+                <h2>Example – Fetch data on mount</h2>
+            </div>
+            <div class="section-content">
+                <pre class="code-block"><code><span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { ref, onMounted } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">const</span> users = ref([])
+
+onMounted(<span class="code-keyword">async</span> () => {
+  <span class="code-keyword">const</span> res = <span class="code-keyword">await</span> fetch(<span class="code-string">"https://jsonplaceholder.typicode.com/users"</span>)
+  users.value = <span class="code-keyword">await</span> res.json()
+})
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;ul&gt;</span>
+    <span class="code-tag">&lt;li</span> <span class="code-property">v-for</span>=<span class="code-string">"user in users"</span> <span class="code-property">:key</span>=<span class="code-string">"user.id"</span><span class="code-tag">&gt;</span>{{ user.name }}<span class="code-tag">&lt;/li&gt;</span>
+  <span class="code-tag">&lt;/ul&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-broom"></i>
+                <h2>Example – Cleanup on unmount</h2>
+            </div>
+            <div class="section-content">
+                <pre class="code-block"><code><span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { ref, onMounted, onUnmounted } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">const</span> time = ref(<span class="code-value">0</span>)
+<span class="code-keyword">let</span> timer
+
+onMounted(() => {
+  timer = setInterval(() => {
+    time.value++
+  }, <span class="code-value">1000</span>)
+})
+
+onUnmounted(() => {
+  clearInterval(timer)
+})
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;p&gt;</span>Timer: {{ time }}<span class="code-tag">&lt;/p&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+            </div>
+        </div>
+        
+        <div class="key-takeaways">
+            <h2>✅ Key Takeaways</h2>
+            <ul class="key-takeaways-list">
+                <li>Lifecycle hooks in Vue 3 are <strong>functions imported from <code>vue</code></strong>.</li>
+                <li>Perfect for <strong>data fetching, DOM access, and cleanup logic</strong>.</li>
+                <li>Composition API hooks replace Options API (<code>mounted</code>, <code>created</code>, etc.) with a <strong>function-based style</strong>.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <button id="downloadBtn" class="download-btn">
+            <i class="fas fa-download"></i> Download as PDF
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a clone of the content to avoid modifying the original
+            const content = document.getElementById('cheatsheet-content').cloneNode(true);
+            
+            // Create a temporary container for the PDF content
+            const pdfContainer = document.createElement('div');
+            pdfContainer.style.padding = '20px';
+            pdfContainer.appendChild(content);
+            
+            // PDF options
+            const options = {
+                margin: 10,
+                filename: 'Vue3_Composition_API_Cheatsheet_Chapter3.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Generate and download the PDF
+            html2pdf().set(options).from(pdfContainer).save();
+        });
+    </script>
+</body>
+</html>
