@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 Composition API Cheatsheet – Chapter 7</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #42b883;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #16a085;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .vue-logo {
+            color: #42b883;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: #16a085;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 10px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .section-header i {
+            font-size: 1.5rem;
+        }
+        
+        .section-content p {
+            margin-bottom: 20px;
+            color: #34495e;
+            font-size: 1.05rem;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #42b883;
+            padding: 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+        
+        .code-comment {
+            color: #7f8c8d;
+        }
+        
+        .code-keyword {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .code-function {
+            color: #3498db;
+        }
+        
+        .code-string {
+            color: #f39c12;
+        }
+        
+        .code-tag {
+            color: #8e44ad;
+        }
+        
+        .code-property {
+            color: #2980b9;
+        }
+        
+        .code-value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .checkmark {
+            color: #27ae60;
+            margin-right: 8px;
+        }
+        
+        .key-takeaways {
+            background: #eafaf1;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .key-takeaways h2 {
+            color: #16a085;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .key-takeaways-list {
+            list-style-type: none;
+        }
+        
+        .key-takeaways-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .key-takeaways-list li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            color: #42b883;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: #16a085;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .download-btn:hover {
+            background: #138a72;
+        }
+        
+        .note-box {
+            background: #fff4e6;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-box h4 {
+            color: #e67e22;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .explanation-box {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .explanation-box h4 {
+            color: #2980b9;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .directive-list {
+            list-style-type: none;
+            margin: 20px 0;
+        }
+        
+        .directive-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .directive-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #16a085;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        tr:hover {
+            background-color: #f5f7fa;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="cheatsheet-content">
+        <header>
+            <div class="vue-logo">
+                <i class="fab fa-vuejs"></i>
+            </div>
+            <h1>Vue 3 Composition API Cheatsheet – Chapter 7</h1>
+            <p class="subtitle">Advanced Reactivity</p>
+        </header>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-bolt"></i>
+                <h2>Advanced Reactivity</h2>
+            </div>
+            <div class="section-content">
+                <p>Vue 3 provides powerful reactivity features. In addition to basic <code>ref</code> and <code>reactive</code>, there are advanced techniques that provide more control over reactivity.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-layer-group"></i>
+                <h2>shallowRef</h2>
+            </div>
+            <div class="section-content">
+                <ul class="directive-list">
+                    <li>Similar to <code>ref</code>, but only makes the <strong>top-level properties</strong> reactive.</li>
+                    <li><strong>Nested properties</strong> will <strong>not</strong> be reactive.</li>
+                    <li>Useful when working with large objects to avoid deep reactivity.</li>
+                </ul>
+                
+                <pre class="code-block"><code><span class="code-keyword">import</span> { shallowRef } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">const</span> user = shallowRef({
+  name: <span class="code-string">"John"</span>,
+  address: { city: <span class="code-string">"New York"</span>, zip: <span class="code-string">"10001"</span> }
+})
+
+user.value.address.city = <span class="code-string">"San Francisco"</span>  <span class="code-comment">// This won't trigger reactivity</span></code></pre>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-exchange-alt"></i>
+                <h2>toRefs</h2>
+            </div>
+            <div class="section-content">
+                <ul class="directive-list">
+                    <li>Converts a <strong>reactive object</strong> into a <strong>ref</strong> for each property.</li>
+                    <li>Useful when passing a reactive object into a function/component while maintaining reactivity.</li>
+                </ul>
+                
+                <pre class="code-block"><code><span class="code-keyword">import</span> { reactive, toRefs } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">const</span> state = reactive({
+  name: <span class="code-string">"John"</span>,
+  age: <span class="code-value">30</span>
+})
+
+<span class="code-keyword">const</span> { name, age } = toRefs(state) <span class="code-comment">// Converts properties to refs</span></code></pre>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-lock"></i>
+                <h2>readonly</h2>
+            </div>
+            <div class="section-content">
+                <ul class="directive-list">
+                    <li>Makes a reactive object or ref <strong>read-only</strong>.</li>
+                    <li>It prevents accidental mutations, useful for <strong>immutable states</strong>.</li>
+                </ul>
+                
+                <pre class="code-block"><code><span class="code-keyword">import</span> { reactive, readonly } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">const</span> state = reactive({
+  name: <span class="code-string">"John"</span>,
+  age: <span class="code-value">30</span>
+})
+
+<span class="code-keyword">const</span> readonlyState = readonly(state)
+
+readonlyState.name = <span class="code-string">"Jane"</span>  <span class="code-comment">// Error: Cannot mutate a readonly object</span></code></pre>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-cog"></i>
+                <h2>customRef</h2>
+            </div>
+            <div class="section-content">
+                <ul class="directive-list">
+                    <li>Creates a custom ref with more control over <strong>get</strong> and <strong>set</strong> operations.</li>
+                    <li>You can create refs that have <strong>custom behavior</strong> (e.g., delayed updates, computed refs with caching, etc.).</li>
+                </ul>
+                
+                <pre class="code-block"><code><span class="code-keyword">import</span> { customRef } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">function</span> <span class="code-function">useCustomRef</span>(initialValue) {
+  <span class="code-keyword">return</span> customRef((track, trigger) => {
+    <span class="code-keyword">let</span> value = initialValue
+
+    <span class="code-keyword">return</span> {
+      get() {
+        track()   <span class="code-comment">// tell Vue: this value was read</span>
+        <span class="code-keyword">return</span> value
+      },
+      set(newValue) {
+        value = newValue
+        trigger() <span class="code-comment">// tell Vue: this value changed</span>
+      }
+    }
+  })
+}
+
+<span class="code-keyword">const</span> myRef = useCustomRef(<span class="code-value">0</span>)
+
+console.log(myRef.value) <span class="code-comment">// track() runs → dependency collected</span>
+myRef.value = <span class="code-value">5</span>          <span class="code-comment">// trigger() runs → watchers re-run</span></code></pre>
+                
+                <div class="explanation-box">
+                    <h4><i class="fas fa-info-circle"></i> track and trigger Explanation</h4>
+                    <ul class="directive-list">
+                        <li><strong><code>track()</code></strong>: Tells Vue that the value has been <strong>read</strong>, so it should start tracking which components or functions depend on it.</li>
+                        <li><strong><code>trigger()</code></strong>: Tells Vue that the value has <strong>changed</strong>, so it should re-run all dependent watchers or reactivity hooks.</li>
+                    </ul>
+                    <p>In <code>customRef</code>, you get full control over <strong>when reactivity happens</strong>:</p>
+                    <ul class="directive-list">
+                        <li><strong><code>track()</code></strong> is called in the <code>get()</code> method to mark the reactive value as <strong>read</strong>.</li>
+                        <li><strong><code>trigger()</code></strong> is called in the <code>set()</code> method to notify Vue that the value has <strong>changed</strong> and any dependent watchers should re-run.</li>
+                    </ul>
+                    
+                    <div class="note-box">
+                        <h4><i class="fas fa-lightbulb"></i> Why This Matters:</h4>
+                        <ul class="directive-list">
+                            <li><strong>Fine-grained control</strong> over reactivity.</li>
+                            <li><strong>Custom behaviors</strong> such as debouncing or throttling changes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-database"></i>
+                <h2>toRaw</h2>
+            </div>
+            <div class="section-content">
+                <ul class="directive-list">
+                    <li>Allows you to access the <strong>raw object</strong> behind a reactive object.</li>
+                    <li>Useful when you need to work with the original, non-proxy object.</li>
+                </ul>
+                
+                <pre class="code-block"><code><span class="code-keyword">import</span> { reactive, toRaw } <span class="code-keyword">from</span> <span class="code-string">"vue"</span>
+
+<span class="code-keyword">const</span> state = reactive({ name: <span class="code-string">"John"</span> })
+
+<span class="code-keyword">const</span> rawState = toRaw(state)  <span class="code-comment">// Gets the raw object behind the reactive one</span></code></pre>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-table"></i>
+                <h2>reactive vs ref vs shallowRef</h2>
+            </div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th><code>ref</code></th>
+                            <th><code>reactive</code></th>
+                            <th><code>shallowRef</code></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Type</strong></td>
+                            <td>Primitive (e.g., string, number, boolean)</td>
+                            <td>Object, Arrays</td>
+                            <td>Object (shallow)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reactivity</strong></td>
+                            <td>Full reactivity, triggers reactivity on value change</td>
+                            <td>Full reactivity, triggers on nested changes</td>
+                            <td>Only top-level reactivity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Use Case</strong></td>
+                            <td>Simple values, such as numbers and strings</td>
+                            <td>Complex objects or arrays</td>
+                            <td>Large objects where nested reactivity is not needed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="key-takeaways">
+            <h2>✅ Key Takeaways</h2>
+            <ul class="key-takeaways-list">
+                <li><strong><code>shallowRef</code></strong>: Top-level reactivity for large objects.</li>
+                <li><strong><code>toRefs</code></strong>: Converts a reactive object into separate refs.</li>
+                <li><strong><code>readonly</code></strong>: Makes an object or ref immutable.</li>
+                <li><strong><code>customRef</code></strong>: Creates a custom reactive object with custom <code>get</code> and <code>set</code> behavior.</li>
+                <li><strong><code>toRaw</code></strong>: Access the original, non-proxied data from a reactive object.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <button id="downloadBtn" class="download-btn">
+            <i class="fas fa-download"></i> Download as PDF
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Create a clone of the content to avoid modifying the original
+            const content = document.getElementById('cheatsheet-content').cloneNode(true);
+            
+            // Create a temporary container for the PDF content
+            const pdfContainer = document.createElement('div');
+            pdfContainer.style.padding = '20px';
+            pdfContainer.appendChild(content);
+            
+            // PDF options
+            const options = {
+                margin: 10,
+                filename: 'Vue3_Composition_API_Cheatsheet_Chapter7.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // Generate and download the PDF
+            html2pdf().set(options).from(pdfContainer).save();
+        });
+    </script>
+</body>
+</html>
